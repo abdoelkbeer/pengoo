@@ -1,0 +1,370 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/container-queries";
+
+@theme inline {
+  --color-primary: #2e69ff;
+  --color-background-light: #f5f6f8;
+  --color-background-dark: #0f1523;
+  --color-surface: #ffffff;
+
+  --font-family-display: "Noto Sans Arabic", "Manrope", sans-serif;
+  --font-family-body: "Noto Sans Arabic", "Manrope", sans-serif;
+
+  --radius-DEFAULT: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+:root {
+  --background: #f5f6f8;
+  --foreground: #0f172a;
+  --font-body: "Noto Sans Arabic", "Manrope", sans-serif;
+  /* equivalent to slate-900 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f1523;
+    --foreground: #f1f5f9;
+    /* equivalent to slate-100 */
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* ===== Page Transition Animation ===== */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition {
+  animation: fadeSlideIn 0.3s ease-out both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out both;
+}
+
+/* ===== Skeleton Loading Shimmer ===== */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg,
+      #f1f5f9 25%,
+      #e2e8f0 37%,
+      #f1f5f9 63%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ===== Sidebar Loading Spinner ===== */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sidebar-loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin-slow 0.6s linear infinite;
+}
+
+/* ===== Continuous Animations ===== */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float-delayed {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float-delayed {
+  animation: float-delayed 4.5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes spin-slow-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-spin-slow-reverse {
+  animation: spin-slow-reverse 12s linear infinite;
+}
+
+/* ===== CSS Stagger Animations ===== */
+.stagger-item {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Initial hidden state transformations */
+.stagger-container-hidden .stagger-item.animate-dir-up {
+  transform: translateY(40px);
+}
+
+.stagger-container-hidden .stagger-item.animate-dir-down {
+  transform: translateY(-40px);
+}
+
+.stagger-container-hidden .stagger-item.animate-dir-left {
+  transform: translateX(40px);
+}
+
+.stagger-container-hidden .stagger-item.animate-dir-right {
+  transform: translateX(-40px);
+}
+
+.stagger-container-hidden .stagger-item.animate-dir-none {
+  transform: translate(0, 0);
+}
+
+/* Visible state */
+.stagger-container-visible .stagger-item {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Sequential transition delays for up to 30 elements */
+.stagger-container-visible .stagger-item:nth-child(1) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 0);
+}
+
+.stagger-container-visible .stagger-item:nth-child(2) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 1);
+}
+
+.stagger-container-visible .stagger-item:nth-child(3) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 2);
+}
+
+.stagger-container-visible .stagger-item:nth-child(4) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 3);
+}
+
+.stagger-container-visible .stagger-item:nth-child(5) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 4);
+}
+
+.stagger-container-visible .stagger-item:nth-child(6) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 5);
+}
+
+.stagger-container-visible .stagger-item:nth-child(7) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 6);
+}
+
+.stagger-container-visible .stagger-item:nth-child(8) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 7);
+}
+
+.stagger-container-visible .stagger-item:nth-child(9) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 8);
+}
+
+.stagger-container-visible .stagger-item:nth-child(10) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 9);
+}
+
+.stagger-container-visible .stagger-item:nth-child(11) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 10);
+}
+
+.stagger-container-visible .stagger-item:nth-child(12) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 11);
+}
+
+.stagger-container-visible .stagger-item:nth-child(13) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 12);
+}
+
+.stagger-container-visible .stagger-item:nth-child(14) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 13);
+}
+
+.stagger-container-visible .stagger-item:nth-child(15) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 14);
+}
+
+.stagger-container-visible .stagger-item:nth-child(16) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 15);
+}
+
+.stagger-container-visible .stagger-item:nth-child(17) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 16);
+}
+
+.stagger-container-visible .stagger-item:nth-child(18) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 17);
+}
+
+.stagger-container-visible .stagger-item:nth-child(19) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 18);
+}
+
+.stagger-container-visible .stagger-item:nth-child(20) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 19);
+}
+
+.stagger-container-visible .stagger-item:nth-child(21) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 20);
+}
+
+.stagger-container-visible .stagger-item:nth-child(22) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 21);
+}
+
+.stagger-container-visible .stagger-item:nth-child(23) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 22);
+}
+
+.stagger-container-visible .stagger-item:nth-child(24) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 23);
+}
+
+.stagger-container-visible .stagger-item:nth-child(25) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 24);
+}
+
+.stagger-container-visible .stagger-item:nth-child(26) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 25);
+}
+
+.stagger-container-visible .stagger-item:nth-child(27) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 26);
+}
+
+.stagger-container-visible .stagger-item:nth-child(28) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 27);
+}
+
+.stagger-container-visible .stagger-item:nth-child(29) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 28);
+}
+
+.stagger-container-visible .stagger-item:nth-child(30) {
+  transition-delay: calc(var(--stagger-delay, 0.1s) + var(--stagger-step, 0.1s) * 29);
+}
+
+/* WooCommerce Manual Connect Form Animation */
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Premium Loading Animations ===== */
+@keyframes shimmer-text {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer-text {
+  background: linear-gradient(90deg, #2e69ff 25%, #93c5fd 50%, #2e69ff 75%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text 3s linear infinite;
+}
+
+@keyframes ring-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-ring-rotate {
+  animation: ring-rotate 2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+@keyframes ring-rotate-reverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animate-ring-rotate-reverse {
+  animation: ring-rotate-reverse 3s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+@keyframes soft-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+.animate-soft-pulse {
+  animation: soft-pulse 2s ease-in-out infinite;
+}

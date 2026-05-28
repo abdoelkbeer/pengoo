@@ -1,0 +1,194 @@
+/* Pengoo Premium Admin CSS */
+:root {
+    --pengoo-primary: #3b82f6;
+    --pengoo-primary-dark: #2563eb;
+    --pengoo-bg: #f8fafc;
+    --pengoo-card-bg: rgba(255, 255, 255, 0.8);
+    --pengoo-text: #1e293b;
+    --pengoo-text-light: #64748b;
+    --pengoo-border: rgba(226, 232, 240, 0.8);
+}
+
+.pengoo-admin-wrap {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--pengoo-text);
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Header & Tabs */
+.pengoo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    background: var(--pengoo-card-bg);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid var(--pengoo-border);
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.pengoo-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pengoo-logo-img {
+    height: 40px;
+    width: auto;
+    transition: transform 0.3s ease;
+}
+
+.pengoo-logo:hover .pengoo-logo-img {
+    transform: scale(1.05) rotate(-5deg);
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--pengoo-primary);
+}
+
+.pengoo-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.pengoo-tab {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--pengoo-text-light);
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pengoo-tab:hover {
+    background: rgba(59, 130, 246, 0.05);
+    color: var(--pengoo-primary);
+}
+
+.pengoo-tab.active {
+    background: var(--pengoo-primary);
+    color: white;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+}
+
+/* Cards & Content */
+.pengoo-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid var(--pengoo-border);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pengoo-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.hero-card {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    text-align: center;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-card h1 {
+    font-size: 32px;
+    margin-bottom: 16px;
+}
+
+.hero-card p {
+    font-size: 18px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 24px;
+}
+
+/* Buttons */
+.pengoo-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+}
+
+.primary-btn {
+    background: var(--pengoo-primary);
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background: var(--pengoo-secondary);
+    color: white;
+}
+
+.large-btn {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+}
+
+/* Forms & UI */
+.pengoo-tab-content { display: none; }
+.pengoo-tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin: 1rem 0;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.disconnected .dot { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+.connected .dot { background: #10b981; box-shadow: 0 0 10px #10b981; }
+
+.pengoo-footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--pengoo-text-light);
+    font-size: 0.875rem;
+}
+
+.pengoo-footer a { color: var(--pengoo-primary); text-decoration: none; }
