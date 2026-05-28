@@ -1,7 +1,7 @@
 'use client';
 // @ts-nocheck
 import React, { useState, Suspense } from 'react';
-import { login, loginWithGoogle } from './actions';
+import { login } from './actions';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { BrandLogo } from '@/components/BrandLogo';
@@ -53,14 +53,12 @@ function LoginForm() {
                 </div>
               )}
             </div>
-            <form action={loginWithGoogle}>
-              <button type="submit" className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white p-3.5 text-slate-700 transition-all hover:bg-slate-50 focus:ring-4 focus:ring-slate-100 font-bold text-sm">
+            <Link href="/auth/google" className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white p-3.5 text-slate-700 transition-all hover:bg-slate-50 focus:ring-4 focus:ring-slate-100 font-bold text-sm">
                 <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24">
                   <path d="M12.0003 20.45c4.656 0 8.5566-3.2196 9.9723-7.6433H12.0003v-3.7227h13.9304c.1353.649.208 1.325.208 2.0298 0 7.6896-5.3887 13.3333-13.6284 13.3333C5.9038 24.4473 1.0003 19.5438 1.0003 13.5s4.9035-10.9473 11.0003-10.9473c2.8688 0 5.4842 1.0175 7.5186 2.6865l-2.9248 2.925C15.6987 7.4243 14.0205 6.4678 12.0003 6.4678c-3.874 0-7.0003 3.1263-7.0003 7.0003s3.1263 7.0003 7.0003 7.0003z" fill="currentColor"></path>
                 </svg>
                 <span>المتابعة باستخدام جوجل</span>
-              </button>
-            </form>
+            </Link>
             <div className="flex items-center gap-3">
               <div className="h-px flex-1 bg-slate-200"></div>
               <span className="text-xs font-medium text-slate-400 uppercase">أو المتابعة عبر البريد الإلكتروني</span>
