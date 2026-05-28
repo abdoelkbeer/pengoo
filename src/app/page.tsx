@@ -45,7 +45,6 @@ export default async function Page() {
                                 <a className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#features">المميزات</a>
                                 <a className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#woocommerce">ووكومرس</a>
                                 <a className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#pricing">الأسعار</a>
-                                <a className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#docs">التوثيق</a>
                                 <a className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors text-sm font-medium" href="#support">الدعم</a>
                             </nav>
                             <div className="flex items-center gap-4">
