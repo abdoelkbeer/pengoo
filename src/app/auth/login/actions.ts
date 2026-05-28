@@ -17,7 +17,7 @@ export async function login(formData: FormData) {
         const recaptchaToken = formData.get('g-recaptcha-response') as string
 
         // Verify reCAPTCHA
-        const isRecaptchaValid = await verifyRecaptcha(recaptchaToken);
+        const isRecaptchaValid = await verifyRecaptcha(recaptchaToken, 'login');
         if (!isRecaptchaValid) {
             console.log('reCAPTCHA verification failed')
             redirect('/auth/login?error=Invalid reCAPTCHA')
@@ -99,12 +99,16 @@ export async function signup(formData: FormData) {
 
 export async function loginWithGoogle() {
     const supabase = await createClient()
-    const origin = (await headers()).get('origin')
+    const headersList = await headers()
+    const origin =
+        headersList.get('origin') ||
+        process.env.NEXT_PUBLIC_APP_URL ||
+        `https://${headersList.get('host')}`
 
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: `${origin}/auth/callback`,
+            redirectTo: `${origin}/auth/callback?next=/dashboard`,
         },
     })
 

@@ -82,8 +82,15 @@ for (const key of optional) {
 }
 
 if (hasValue("NEXT_PUBLIC_RECAPTCHA_SITE_KEY") && env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY.includes("6LeIxAcT")) {
-  printStatus("production reCAPTCHA site key", false, "Google test key is configured");
+  printStatus("production reCAPTCHA v3 site key", false, "Google test key is configured");
   failed = true;
+}
+
+if (hasValue("RECAPTCHA_MIN_SCORE")) {
+  const score = Number(env.RECAPTCHA_MIN_SCORE);
+  const ok = Number.isFinite(score) && score >= 0 && score <= 1;
+  printStatus("reCAPTCHA v3 minimum score", ok, ok ? String(score) : "must be between 0 and 1");
+  failed ||= !ok;
 }
 
 if (hasValue("SUPABASE_URL") && hasValue("NEXT_PUBLIC_SUPABASE_URL")) {

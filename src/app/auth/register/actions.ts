@@ -14,7 +14,7 @@ export async function signup(formData: FormData) {
     const recaptchaToken = formData.get('g-recaptcha-response') as string
 
     // Verify reCAPTCHA
-    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken);
+    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken, 'register');
     if (!isRecaptchaValid) {
         return redirect('/auth/register?error=Invalid reCAPTCHA')
     }

@@ -3,8 +3,8 @@ import React, { useState, Suspense } from 'react';
 import { signup } from './actions';
 import { loginWithGoogle } from '../login/actions';
 import { useSearchParams } from 'next/navigation';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { BrandLogo } from '@/components/BrandLogo';
+import { RecaptchaV3Fields } from '@/components/RecaptchaV3Fields';
 
 const translateError = (err: string | null) => {
     if (!err) return null;
@@ -81,12 +81,7 @@ function RegisterForm() {
                                     أوافق على <a href="/terms" className="text-primary hover:underline">شروط الاستخدام</a> و <a href="/privacy" className="text-primary hover:underline">سياسة الخصوصية</a>
                                 </label>
                             </div>
-                            <div className="flex justify-center my-2 scale-90 sm:scale-100 origin-center">
-                                <ReCAPTCHA
-                                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
-                                    hl="ar"
-                                />
-                            </div>
+                            <RecaptchaV3Fields action="register" />
                             <button className="mt-2 w-full rounded-xl bg-primary py-3.5 text-white font-bold text-sm shadow-lg shadow-primary/30 hover:bg-blue-600 hover:shadow-primary/40 focus:ring-4 focus:ring-primary/30 active:scale-[0.98] transition-all" type="submit">
                                 إنشاء حساب مجاني
                             </button>

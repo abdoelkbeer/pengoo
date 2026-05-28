@@ -1,4 +1,11 @@
-export async function verifyRecaptcha(token: string | null) {
+type RecaptchaVerification = {
+    success?: boolean;
+    score?: number;
+    action?: string;
+    ['error-codes']?: string[];
+};
+
+export async function verifyRecaptcha(token: string | null, expectedAction?: string) {
     if (!token) return false;
 
     const secret = process.env.RECAPTCHA_SECRET_KEY;
@@ -21,6 +28,17 @@ export async function verifyRecaptcha(token: string | null) {
 
     if (!response.ok) return false;
 
-    const result = await response.json() as { success?: boolean };
-    return result.success === true;
+    const result = await response.json() as RecaptchaVerification;
+    if (result.success !== true) return false;
+
+    if (expectedAction && result.action && result.action !== expectedAction) {
+        return false;
+    }
+
+    const minimumScore = Number(process.env.RECAPTCHA_MIN_SCORE || '0.5');
+    if (typeof result.score === 'number' && result.score < minimumScore) {
+        return false;
+    }
+
+    return true;
 }
