@@ -43,8 +43,6 @@ export default function Page() {
     // New connection flow state
     const [connectionMethod, setConnectionMethod] = useState<'smart' | 'manual' | null>(null);
     const [manualStoreUrl, setManualStoreUrl] = useState('');
-    const [pluginDownloaded, setPluginDownloaded] = useState(false);
-
     // Sync languages state
     const [syncingLanguages, setSyncingLanguages] = useState(false);
     const [storeLanguages, setStoreLanguages] = useState<any[]>([]);
@@ -143,12 +141,6 @@ export default function Page() {
             }
         } catch { showMessage('حدث خطأ في الاتصال', 'error'); }
         setSaving(false);
-    };
-
-    const handleSmartConnect = () => {
-        const appUrl = window.location.origin;
-        const callbackUrl = `${appUrl}/woocommerce-auth`;
-        showMessage('سيتم توجيهك للووردبريس... اضغط "Connect with 1-Click" من إعدادات الإضافة', 'success');
     };
 
     const handleSyncLanguages = async () => {
@@ -304,53 +296,32 @@ export default function Page() {
                                 </div>
                             )}
 
-                            {/* ── Connection Methods ── */}
+                            {/* ── Direct Connection ── */}
                             {!store && (
-                                <div className="flex flex-col gap-4">
-                                    {/* Automatic Connect (Main Focus) */}
-                                    <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm flex flex-col items-center text-center transition-all hover:border-primary/30">
-                                        <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                                            <span className="material-symbols-outlined text-3xl">auto_awesome</span>
+                                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="min-w-0">
+                                            <h2 className="text-lg font-bold text-slate-900">اربط WooCommerce الآن</h2>
+                                            <p className="mt-1 text-sm text-slate-500">حمّل البلجن، فعّله في ووردبريس، واضغط ربط من داخل البلجن.</p>
                                         </div>
-                                        <div className="flex flex-col items-center mb-6">
-                                            <h3 className="font-bold text-slate-900 text-xl mb-2 flex items-center gap-3">
-                                                الربط الأوتوماتيكي
-                                                <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-bold">الأسهل والأسرع</span>
-                                            </h3>
-                                            <p className="text-sm text-slate-500 max-w-lg leading-relaxed">
-                                                طريقة سريعة وآمنة. قم بتحميل إضافة ووردبريس، ثم اضغط زر الربط من داخل متجرك ليتم ربط المتجر وإعداد Webhooks تلقائياً!
-                                            </p>
-                                        </div>
-
-                                        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
-                                            <a
-                                                href="/pengoo-woocommerce-connector.zip"
-                                                download
-                                                onClick={() => setPluginDownloaded(true)}
-                                                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 transition-all shadow-sm"
-                                            >
-                                                <span className="material-symbols-outlined text-lg">download</span>
-                                                1. تحميل الإضافة
-                                            </a>
-                                            <button
-                                                onClick={handleSmartConnect}
-                                                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary/10 text-primary text-sm font-bold hover:bg-primary/20 transition-all border border-primary/20"
-                                            >
-                                                <span className="material-symbols-outlined text-lg">open_in_new</span>
-                                                2. الربط من المتجر
-                                            </button>
-                                        </div>
+                                        <a
+                                            href="/pengoo-woocommerce-connector.zip"
+                                            download
+                                            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:bg-blue-700"
+                                        >
+                                            <span className="material-symbols-outlined text-lg">download</span>
+                                            تحميل البلجن
+                                        </a>
                                     </div>
 
-                                    {/* Manual Connect Link */}
                                     {connectionMethod !== 'manual' && (
-                                        <div className="text-center mt-2 mb-2">
+                                        <div className="mt-4 border-t border-slate-100 pt-4">
                                             <button
                                                 onClick={() => setConnectionMethod('manual')}
-                                                className="text-sm font-medium text-slate-500 hover:text-primary transition-colors flex items-center justify-center gap-2 mx-auto bg-transparent border-none cursor-pointer"
+                                                className="inline-flex items-center gap-2 bg-transparent text-sm font-medium text-slate-500 transition-colors hover:text-primary"
                                             >
                                                 <span className="material-symbols-outlined text-[16px]">tune</span>
-                                                أو الربط اليدوي
+                                                الربط اليدوي بالمفاتيح
                                             </button>
                                         </div>
                                     )}

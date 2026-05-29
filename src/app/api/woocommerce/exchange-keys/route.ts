@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        const webhookSecret = crypto.randomUUID();
+
         // Step 1: Exchange keys with the WordPress plugin (server-to-server, no CORS)
         const cleanUrl = store_url.replace(/\/$/, '');
         const endpoint = `${cleanUrl}/wp-json/pengoo/v1/exchange-keys`;
@@ -24,7 +26,7 @@ export async function POST(request: NextRequest) {
         const wpResponse = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ temp_token }),
+            body: JSON.stringify({ temp_token, webhook_secret: webhookSecret }),
             signal: AbortSignal.timeout(15000),
         });
 
@@ -45,7 +47,7 @@ export async function POST(request: NextRequest) {
         let storeId = null;
 
         if (user) {
-            const webhookSecret = crypto.randomUUID();
+            const storeWebhookSecret = wpData.webhook_secret || webhookSecret;
             const storeName = cleanUrl.replace(/^https?:\/\//, '').split('/')[0];
 
             // Check if store already exists
@@ -62,7 +64,7 @@ export async function POST(request: NextRequest) {
                     .update({
                         consumer_key: wpData.consumer_key,
                         consumer_secret: wpData.consumer_secret,
-                        webhook_secret: webhookSecret,
+                        webhook_secret: storeWebhookSecret,
                         is_active: true,
                         name: storeName,
                         site_language: wpData.site_language || site_language || 'ar',
@@ -78,7 +80,7 @@ export async function POST(request: NextRequest) {
                         store_url: cleanUrl,
                         consumer_key: wpData.consumer_key,
                         consumer_secret: wpData.consumer_secret,
-                        webhook_secret: webhookSecret,
+                        webhook_secret: storeWebhookSecret,
                         is_active: true,
                         name: storeName,
                         site_language: wpData.site_language || site_language || 'ar',
@@ -97,8 +99,8 @@ export async function POST(request: NextRequest) {
                 try {
                     const authHeader = 'Basic ' + Buffer.from(`${wpData.consumer_key}:${wpData.consumer_secret}`).toString('base64');
                     const webhooks = [
-                        { name: 'Pengoo - Order Created', topic: 'order.created', delivery_url: pengooWebhookUrl, secret: webhookSecret },
-                        { name: 'Pengoo - Order Updated', topic: 'order.updated', delivery_url: pengooWebhookUrl, secret: webhookSecret }
+                        { name: 'Pengoo - Order Created', topic: 'order.created', delivery_url: pengooWebhookUrl, secret: storeWebhookSecret },
+                        { name: 'Pengoo - Order Updated', topic: 'order.updated', delivery_url: pengooWebhookUrl, secret: storeWebhookSecret }
                     ];
                     for (const webhook of webhooks) {
                         await fetch(`${cleanUrl}/wp-json/wc/v3/webhooks`, {

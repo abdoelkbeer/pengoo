@@ -37,8 +37,6 @@ export default function Page() {
     // New connection flow state
     const [connectionMethod, setConnectionMethod] = useState<'smart' | 'manual' | null>(null);
     const [manualStoreUrl, setManualStoreUrl] = useState('');
-    const [pluginDownloaded, setPluginDownloaded] = useState(false);
-
     // Sync languages state
     const [syncingLanguages, setSyncingLanguages] = useState(false);
     const [storeLanguages, setStoreLanguages] = useState<any[]>([]);
@@ -138,12 +136,6 @@ export default function Page() {
             }
         } catch { showMessage('حدث خطأ في الاتصال', 'error'); }
         setSaving(false);
-    };
-
-    const handleSmartConnect = () => {
-        const appUrl = window.location.origin;
-        const callbackUrl = `${appUrl}/woocommerce-auth`;
-        showMessage('سيتم توجيهك للووردبريس... اضغط "Connect with 1-Click" من إعدادات الإضافة', 'success');
     };
 
     const handleSyncLanguages = async () => {
@@ -276,69 +268,35 @@ export default function Page() {
                                 </div>
                             )}
 
-                            {/* ── Connection Methods ── */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-                                {/* Automatic Connect */}
-                                <div className={`bg-white rounded-2xl border-2 p-6 shadow-sm flex flex-col transition-all ${store ? 'border-green-300 bg-green-50/30' : 'border-slate-200 hover:border-primary/40'}`}>
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold ${store ? 'bg-green-500 text-white' : 'bg-primary/10 text-primary'}`}>
-                                                <span className="material-symbols-outlined text-xl">{store ? 'check' : 'auto_awesome'}</span>
-                                            </div>
-                                            <div>
-                                                <h3 className="font-bold text-slate-900 text-lg">الربط الأوتوماتيكي</h3>
-                                                <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-bold">الأسهل والأسرع</span>
-                                            </div>
+                            {/* ── Direct Connection ── */}
+                            {!store && (
+                                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="min-w-0">
+                                            <h2 className="text-lg font-bold text-slate-900">اربط WooCommerce الآن</h2>
+                                            <p className="mt-1 text-sm text-slate-500">حمّل البلجن، فعّله في ووردبريس، واضغط ربط من داخل البلجن.</p>
                                         </div>
-                                    </div>
-                                    <p className="text-sm text-slate-500 flex-1 mb-5 leading-relaxed">
-                                        طريقة سريعة وآمنة. قم بتحميل إضافة ووردبريس، ثم اضغط زر الربط من داخل متجرك ليتم ربط المتجر وإعداد Webhooks تلقائياً!
-                                    </p>
-
-                                    <div className="flex flex-col gap-3">
                                         <a
                                             href="/pengoo-woocommerce-connector.zip"
                                             download
-                                            onClick={() => setPluginDownloaded(true)}
-                                            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 transition-all shadow-sm"
+                                            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:bg-blue-700"
                                         >
                                             <span className="material-symbols-outlined text-lg">download</span>
-                                            1. تحميل إضافة ووردبريس
+                                            تحميل البلجن
                                         </a>
+                                    </div>
+
+                                    <div className="mt-4 border-t border-slate-100 pt-4">
                                         <button
-                                            onClick={handleSmartConnect}
-                                            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary/10 text-primary text-sm font-bold hover:bg-primary/20 transition-all border border-primary/20"
+                                            onClick={() => setConnectionMethod(connectionMethod === 'manual' ? null : 'manual')}
+                                            className="inline-flex items-center gap-2 bg-transparent text-sm font-medium text-slate-500 transition-colors hover:text-primary"
                                         >
-                                            <span className="material-symbols-outlined text-lg">open_in_new</span>
-                                            2. ثم اربط من داخل متجرك بضغطة
+                                            <span className="material-symbols-outlined text-[16px]">tune</span>
+                                            {connectionMethod === 'manual' ? 'إخفاء الربط اليدوي' : 'الربط اليدوي بالمفاتيح'}
                                         </button>
                                     </div>
                                 </div>
-
-                                {/* Manual Connect */}
-                                <div className={`bg-white rounded-2xl border-2 p-6 shadow-sm flex flex-col transition-all ${connectionMethod === 'manual' ? 'border-primary/50 ring-2 ring-primary/10' : 'border-slate-200 hover:border-primary/40'}`}>
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
-                                            <span className="material-symbols-outlined text-xl">tune</span>
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-slate-900 text-lg">الربط اليدوي</h3>
-                                            <span className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full font-bold">للمطورين أو Localhost</span>
-                                        </div>
-                                    </div>
-                                    <p className="text-sm text-slate-500 flex-1 mb-5 leading-relaxed">
-                                        استخدم هذه الطريقة إذا كان متجرك يعمل محلياً أو إذا كنت تفضل إدخال مفاتيح REST API برمجياً. Webhooks يتم توليدها تلقائياً.
-                                    </p>
-                                    <button
-                                        onClick={() => setConnectionMethod(connectionMethod === 'manual' ? null : 'manual')}
-                                        className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all mt-auto ${connectionMethod === 'manual' ? 'bg-primary text-white shadow-md shadow-primary/20' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
-                                    >
-                                        <span className="material-symbols-outlined text-lg">{connectionMethod === 'manual' ? 'expand_less' : 'expand_more'}</span>
-                                        {connectionMethod === 'manual' ? 'إخفاء الإعدادات' : 'إظهار إعدادات الربط اليدوي'}
-                                    </button>
-                                </div>
-                            </div>
+                            )}
 
                             {/* ── Manual Connect Expanded Form ── */}
                             {connectionMethod === 'manual' && (

@@ -64,19 +64,18 @@ export async function POST(req: Request) {
                     const cleanUrl = store.store_url.replace(/\/$/, '');
                     try {
                         console.log(`[Callback] Updating order ${orderId} meta 'whatsapp_response' to ${metaValue}`);
-                        const wcRes = await fetch(`${cleanUrl}/wp-json/wc/v3/orders/${orderId}`, {
-                            method: 'PUT',
+                        const wcRes = await fetch(`${cleanUrl}/wp-json/pengoo/v1/order-action`, {
+                            method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
+                                'x-pengoo-secret': store.webhook_secret || '',
                                 'Authorization': 'Basic ' + Buffer.from(`${store.consumer_key}:${store.consumer_secret}`).toString('base64')
                             },
-                            body: JSON.stringify({ 
-                                meta_data: [
-                                    {
-                                        key: 'whatsapp_response',
-                                        value: metaValue
-                                    }
-                                ] 
+                            body: JSON.stringify({
+                                order_id: orderId,
+                                action: btnConfig.action,
+                                response: metaValue,
+                                secret: store.webhook_secret
                             })
                         });
                         if (!wcRes.ok) {
@@ -135,6 +134,20 @@ export async function POST(req: Request) {
                     },
                     body: JSON.stringify({ status: targetStatus })
                 });
+
+                await fetch(`${cleanUrl}/wp-json/pengoo/v1/order-action`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-pengoo-secret': store.webhook_secret || '',
+                        'Authorization': 'Basic ' + Buffer.from(`${store.consumer_key}:${store.consumer_secret}`).toString('base64')
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        action: action === 'confirm' ? 'confirmed' : 'cancelled',
+                        secret: store.webhook_secret
+                    })
+                }).catch((err) => console.error('[Callback] Pengoo legacy order action error:', err));
 
                 const workerUrl = `${process.env.WORKER_URL || 'http://localhost:3001'}/api/whatsapp/send`;
                 await fetch(workerUrl, {
